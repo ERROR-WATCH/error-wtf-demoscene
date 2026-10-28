@@ -45,12 +45,10 @@ Kunst, Musik, Branding und Code dieses Projekts sind eigenständig — siehe
 - `docs/AUFTRAG_KERNREGELN.md` — verbindliche Kernregeln
 - `SPEC.md` — Projektspezifikation
 
-## Repository-Hinweis
+## Repository
 
-Dieses Repo wird unter dem Zwischen-Account **ERROR-WATCH** geführt (fehlende Schreibrechte
-auf den Ziel-Account zum Zeitpunkt der Anlage) und ist als Transfer nach
-`github.com/error-wtf/error-wtf-demoscene` vorgesehen — nach dem GitHub-Transfer
-redirectet diese URL automatisch.
+Primäres Repository: **github.com/error-wtf/error-wtf-demoscene** (dieses Repo).
+Ein Entwicklungsspiegel existiert unter ERROR-WATCH/error-wtf-demoscene.
 
 ## License
 
