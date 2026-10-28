@@ -270,6 +270,10 @@ static const char *FS =
     " o=vec4(col,1.0);}";
 
 int main(void) {
+#ifdef GLFW_PLATFORM_X11
+    /* force XWayland so X11 evidence tools (xdotool/x11grab) can see the window */
+    glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+#endif
     glfwInit();
     GLFWwindow *win = NULL;
     EGLDisplay dpy = EGL_NO_DISPLAY; EGLSurface surf = EGL_NO_SURFACE; EGLContext ctx = EGL_NO_CONTEXT;
@@ -293,6 +297,7 @@ int main(void) {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         win = glfwCreateWindow(W, H, "ERROR.wtf // BEYOND THE ERROR", NULL, NULL);
         if (!win) { fprintf(stderr, "EVIDENCE_FAIL: window\n"); return 2; }
+        glfwSetWindowPos(win, 300, 200); /* keep inside visible screen for capture tools */
         glfwMakeContextCurrent(win);
     }
     load_gl();
@@ -326,6 +331,8 @@ int main(void) {
     unsigned char *px = malloc((size_t)W * H * 3);
     int cap_i = 0, last_scene = -1;
     static const double CAPT_T[] = { 6, 20, 36, 55, 70, 85, 107, 116 };
+    int capture_all = getenv("ERRORWTF_CAPTURE_ALL") != NULL;
+    double next_cap = 0.0; int cap_idx = 0;
     while (1) {
         double t = (double)atomic_load(&g_samples) / SR;
         if (t >= (double)EW_SECONDS) break;
@@ -341,7 +348,20 @@ int main(void) {
             glfwPollEvents();
             glfwSwapBuffers(win);
         } else {
-            if (cap_i < 8 && t >= CAPT_T[cap_i]) {
+            if (capture_all) {
+                if (t >= next_cap && cap_idx < EW_SECONDS) {
+                    glReadPixels_p(0, 0, W, H, GL_RGB, GL_UNSIGNED_BYTE, px);
+                    char fn[128];
+                    snprintf(fn, sizeof fn, "captures/1m/cap_%03d.ppm", cap_idx++);
+                    FILE *f = fopen(fn, "wb");
+                    if (f) {
+                        fprintf(f, "P6\n%d %d\n255\n", W, H);
+                        for (int y = H - 1; y >= 0; y--) fwrite(px + (size_t)y * W * 3, (size_t)W * 3, 1, f);
+                        fclose(f);
+                    }
+                    next_cap = cap_idx;
+                }
+            } else if (cap_i < 8 && t >= CAPT_T[cap_i]) {
                 glReadPixels_p(0, 0, W, H, GL_RGB, GL_UNSIGNED_BYTE, px);
                 char fn[128];
                 snprintf(fn, sizeof fn, "captures/1m/prod_t%.0f.ppm", CAPT_T[cap_i]);
