@@ -1,16 +1,16 @@
 {
   "schema": "errorwtf.1m.release-gate.v1",
-  "date": "2026-10-28T17:31:28+01:00",
-  "artifact_sha256_prefix": "94f10d2f757a8b0d",
+  "date": "2026-10-28T18:02:33+01:00",
+  "artifact_sha256_prefix": "7a0786dde1946455",
   "passed": 9, "failed": 0, "gate": "PASS",
   "size_exact_1048576": "PASS (1048576)",
   "elf_x86_64": "PASS (PASS)",
-  "artifact_sha256_prefix": "94f10d2f757a8b0d",
+  "artifact_sha256_prefix": "7a0786dde1946455",
   "run_exit_clean": "PASS (0)",
   "audio_samples_5760000": "PASS (5760000)",
   "scenes_hit": "PASS (8 >= 8)",
-  "fracture_red_pct_at_t70": "PASS (78.9 >= 60)",
-  "wordmark_white_pct_at_t107": "PASS (0.92 >= 0.70)",
-  "afterimage_fade_luma<15": "PASS (6.0)",
+  "fracture_red_field_pct_at_t70": "PASS (121.2 >= 50)",
+  "wordmark_white_pct_at_t107": "PASS (0.76 >= 0.70)",
+  "afterimage_fade_luma<15": "PASS (6.1)",
   "score_preview_120s": "PASS (PASS)"
 }

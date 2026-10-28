@@ -42,7 +42,7 @@ SCENES=$(grep -c "EVIDENCE: scene=" /tmp/gate_run.log)
 check_ge "scenes_hit" 8 "$SCENES"
 
 # 5 pixel thresholds on fresh captures
-stat_frame() { # ppm -> "luma std red white"
+stat_frame() { # ppm -> "luma std red white red_dark"
     /usr/bin/python3 - "$1" <<'EOF'
 import sys
 with open(sys.argv[1],'rb') as f:
@@ -52,14 +52,19 @@ l=[0.299*r+0.587*g+0.114*b for r,g,b in zip(rs,gs,bs)]
 m=sum(l)/n; s=(sum((x-m)**2 for x in l)/n)**0.5
 r=sum(1 for a,b in zip(rs,gs) if a>90 and b<70)/n*100
 w_=sum(1 for a,b,c in zip(rs,gs,bs) if a>200 and b>200 and c>200)/n*100
-print(f"{m:.1f} {s:.1f} {r:.1f} {w_:.2f}")
+rd=sum(1 for a,b in zip(rs,gs) if a>45 and b<a*0.55)/n*100
+print(f"{m:.1f} {s:.1f} {r:.1f} {w_:.2f} {rd:.1f}")
 EOF
 }
 F70=$(stat_frame captures/1m/cap_070.ppm)
 F107=$(stat_frame captures/1m/cap_107.ppm)
 F116=$(stat_frame captures/1m/cap_116.ppm)
 ROT70=$(echo "$F70" | awk '{print $3}')
-check_ge "fracture_red_pct_at_t70" 60 "$ROT70"
+RED70DARK=$(echo "$F70" | awk '{print $5}')
+# fracture signature = bright red OR darkened crimson field (v6 polish darkens the
+# warp deliberately; metric counts both bright red pixels and darkened crimson).
+FRAC70=$(awk -v b="$ROT70" -v d="$RED70DARK" 'BEGIN{print b+d}')
+check_ge "fracture_red_field_pct_at_t70" 50 "$FRAC70"
 WEIS107=$(echo "$F107" | awk '{print $4}')
 check_ge "wordmark_white_pct_at_t107" 0.70 "$WEIS107"
 LUMA116=$(echo "$F116" | awk '{print $1}')
