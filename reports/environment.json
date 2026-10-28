@@ -1,0 +1,61 @@
+{
+  "schema": "errorwtf.environment.v1",
+  "captured_at_utc": "2026-10-28T14:25:36Z",
+  "host": {
+    "kernel": "7.1.5+kali-amd64",
+    "arch": "x86_64",
+    "cpu_cores": 16,
+    "distro": "Kali GNU/Linux Rolling",
+    "ram_total_gib": 62,
+    "ram_available_gib": 35
+  },
+  "storage": {
+    "project_root": "/mnt/DATEN/ERROR_WTF_DEMOSCENE",
+    "device": "/dev/sdb1",
+    "size": "1.9T",
+    "free": "221G (89% used)",
+    "writable": true,
+    "owner": "error:error"
+  },
+  "gpus": [
+    {
+      "count_verified": 1,
+      "note": "Auftragsbriefing sagte 3x RTX 4060 Ti — REALITÄT: genau EINE RTX 4060 Ti 16GB. Alle Architekturentscheidungen basieren auf dieser einen GPU.",
+      "name": "NVIDIA GeForce RTX 4060 Ti",
+      "driver": "595.91.07",
+      "vram_total_mib": 16380,
+      "vram_used_at_audit_mib": 12819,
+      "vram_used_by": "lokale LLM-Infrastruktur (colibri/strata on-demand)",
+      "vram_free_typical_when_llm_idle_mib": 16000,
+      "vram_free_at_audit_mib": 3561
+    }
+  ],
+  "display": {
+    "session": "Wayland (mutter) + Xwayland, User=error",
+    "agent_terminal_display_vars": "leer (headless root shell)",
+    "runtime_test_strategy": "Apps laufen im error-User-Kontext via sudo -u error mit Sitzungs-Env; EGL-headless für offscreen Verifikation"
+  },
+  "graphics_stack": {
+    "opengl": "via libGL 1.2 (glvnd)",
+    "egl": "1.5",
+    "glfw": "3.5.1",
+    "x11": "1.8.13",
+    "vulkan": "vulkaninfo vorhanden",
+    "sdl2": "FEHLT",
+    "openal": "FEHLT"
+  },
+  "audio_stack": {
+    "alsa": "1.2.16.1 (libasound.so vorhanden)",
+    "pulse": "17.0",
+    "server": "user-PipeWire (error session)",
+    "openal": "FEHLT"
+  },
+  "toolchain": {
+    "gcc": "16.2.0",
+    "make": "4.4.1",
+    "nasm": "3.01",
+    "python": "3.14.8",
+    "ffmpeg": "9.0.2 (captures)"
+  },
+  "llm_infra_conflict_note": "GPU wird von lokaler LLM-Kette (colibri 35B ~13GB) geteilt. Demo-Rendering braucht <1GB; keine Konflikte erwartet, aber Benchmarks nur ohne gleichzeitige LLM-Loads messen."
+}

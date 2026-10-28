@@ -1,0 +1,17 @@
+# build artifacts
+errorwtf-4k
+errorwtf-16k
+errorwtf-64k
+errorwtf-ultimate
+build/
+*.o
+*.elf.tmp
+
+# captures (large media goes to releases, not git history)
+captures/raw/
+
+# caches
+__pycache__/
+*.pyc
+tmp/
+.cache/

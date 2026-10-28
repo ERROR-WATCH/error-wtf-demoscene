@@ -1,0 +1,19 @@
+{
+  "schema": "errorwtf.provider-inventory.v1",
+  "verified_at": "2026-10-28",
+  "cost_limit": "0.00 EUR additional",
+  "providers": [
+    {"provider": "zai", "model": "glm-5.3-flash", "local": false, "endpoint": "z.ai api (coding plan)", "transport": "openai-compatible chat", "cost_class": "SUBSCRIPTION_VERIFIED", "quota": "coding-plan quota", "use": "design/review", "allowed": true, "notes": "existing paid subscription; no PAYG"},
+    {"provider": "openai-codex", "model": "gpt-6.1-sol", "local": false, "endpoint": "chatgpt.com backend-api codex", "transport": "codex backend", "cost_class": "SUBSCRIPTION_VERIFIED", "quota": "chatgpt subscription", "use": "code review second opinion", "allowed": true},
+    {"provider": "colibri-local", "model": "qwen3.6-colibri", "local": true, "endpoint": "http://127.0.0.1:8102/v1", "transport": "chat_completions via local gateway", "cost_class": "LOCAL_VERIFIED", "quota": "GPU bound", "use": "dev iteration / subagents", "allowed": true, "verified": "2026-10-28 live smoke 'bereit'"},
+    {"provider": "strata-local-qwen", "model": "qwen3.8-flash-next-iq3_s", "local": true, "endpoint": "http://127.0.0.1:8112/v1", "transport": "chat_completions via local gateway", "cost_class": "LOCAL_VERIFIED", "quota": "GPU bound", "use": "dev iteration", "allowed": true, "verified": "2026-10-28 live smoke 'bereit'"},
+    {"provider": "ollama-local", "model": "gemma4:latest", "local": true, "endpoint": "http://127.0.0.1:11434/v1", "transport": "chat_completions", "cost_class": "LOCAL_VERIFIED", "quota": "GPU bound, 131072 ctx", "use": "light tasks", "allowed": true, "verified": "2026-10-28 live smoke + 8195-token context test"},
+    {"provider": "ollama-cloud", "model": "deepseek-v4-pro:0813", "local": false, "endpoint": "https://ollama.com/v1", "transport": "chat_completions", "cost_class": "FREE_TIER_BROKEN", "quota": "429 pro-limit until month reset (28.10. log)", "use": "none", "allowed": false, "notes": "broken, not billable"},
+    {"provider": "nous", "model": "stepfun/step-3.7-flash:free", "local": false, "endpoint": "https://inference-api.nousresearch.com/v1", "transport": "chat_completions", "cost_class": "FREE_TIER_RATE_LIMITED", "quota": "free tier limits", "use": "avoid, not critical", "allowed": true, "notes": "only non-critical calls"},
+    {"provider": "gemini", "model": "gemini-3.8-flash", "local": false, "endpoint": "google api", "transport": "n/a", "cost_class": "BLOCKED", "quota": "free limit 0; paid key only", "use": "none", "allowed": false},
+    {"provider": "anthropic/claude/vertex", "model": "any", "local": false, "endpoint": "n/a", "transport": "n/a", "cost_class": "FORBIDDEN", "quota": "n/a", "use": "none", "allowed": false}
+  ],
+  "fallback_chain_audit": "existing hermes chain contains NO pay-as-you-go / credit provider; broken free entries fail without cost",
+  "global_config_modified": false,
+  "project_rule": "dev iterations prefer local gateways; remote zai/codex only for scoped design/review steps"
+}
