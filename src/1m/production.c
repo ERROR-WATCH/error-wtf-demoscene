@@ -389,6 +389,13 @@ int main(void) {
 
     pthread_t at; pthread_create(&at, NULL, audio_thread, NULL);
 
+    int bench_mode = getenv("ERRORWTF_BENCH") != NULL;
+    long bench_frames = 0;
+    struct timespec bench_start, bench_end;
+    if (bench_mode) clock_gettime(CLOCK_MONOTONIC, &bench_start);
+    int live_frames = 0;
+    double live_first = -1.0;
+
     int cap_i = 0, last_scene = -1;
     static const double CAPT_T[] = { 6, 20, 36, 55, 70, 85, 107, 116 };
     int capture_all = getenv("ERRORWTF_CAPTURE_ALL") != NULL;
@@ -407,6 +414,8 @@ int main(void) {
         if (win) {
             glfwPollEvents();
             glfwSwapBuffers(win);
+            live_frames++;
+            if (live_first < 0.0) live_first = glfwGetTime();
         } else {
             if (capture_all) {
                 if (t >= next_cap && cap_idx < EW_SECONDS) {
@@ -434,9 +443,22 @@ int main(void) {
                 }
                 cap_i++;
             }
-            struct timespec ts = { 0, 100 * 1000 * 1000 };
-            nanosleep(&ts, NULL);
+            if (!bench_mode) {
+                struct timespec ts = { 0, 100 * 1000 * 1000 };
+                nanosleep(&ts, NULL);
+            }
         }
+        if (bench_mode) bench_frames++;
+    }
+    if (bench_mode) {
+        clock_gettime(CLOCK_MONOTONIC, &bench_end);
+        double secs = (bench_end.tv_sec - bench_start.tv_sec) + (bench_end.tv_nsec - bench_start.tv_nsec) / 1e9;
+        printf("EVIDENCE: bench headless throughput %.1f fps (frames=%ld over %.1fs wall)\n",
+               bench_frames / secs, bench_frames, secs);
+    }
+    if (win && live_frames > 0 && live_first >= 0) {
+        printf("EVIDENCE: live desktop fps %.1f (frames=%d)\n",
+               live_frames / (glfwGetTime() - live_first), live_frames);
     }
     pthread_join(at, NULL);
     printf("EVIDENCE: run complete duration=%ds exit=clean\n", EW_SECONDS);

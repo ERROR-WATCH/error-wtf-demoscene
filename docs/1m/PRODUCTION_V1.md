@@ -32,6 +32,16 @@ Stand: 2026-10-28 · Branch `feature/errorwtf-1m` · Artefakt: `errorwtf-1m`
 Aufbau von links mit Fracture-Glitch (der erste Versuch zerbricht), ab 103,5 s sauber
 stehend; statistisch belegt durch Weißpixel-Anstieg 0,79→1,41 % bei t=107.
 
+## Performance (nachgetragen 28.10., Abend)
+
+| Messung | Ergebnis | Modus |
+|---|---|---|
+| Live-Desktop-FPS | **56,7 fps** (6800 frames / 120 s, vsync-gebunden) | GLFW-Fenster auf der echten GNOME/Wayland-Session (error-User), exit=clean |
+| Headless-Durchsatz | **170.898 fps** (21,5 Mio Frames / 126 s wall) | ERRORWTF_BENCH=1, kein VSync, GPU-Kapazität |
+
+Performance ist damit keine Grenze: Der Offline-30fps-Pass nutzt <0,1 % der
+messbaren Kapazität; live läuft die Demo vsync-stabil ruckelfrei.
+
 ## Known-Limits (ehrlich)
 - Ästhetische Gesamtwirkung: SELF_REVIEW (zai-Vision-Guthaben leer, 429).
   Menschlicher Blick: `captures/1m/production_v1_band.png`.
