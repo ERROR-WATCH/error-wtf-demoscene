@@ -5,9 +5,23 @@
 
 Demoscene-Produktionsreihe von **ERROR.wtf** (Lino Casu).
 
-**Status: In aktiver Entwicklung (Phase 1–2). Noch keine Releases.** Diese Datei reflektiert ausschließlich den realen Stand.
+**Status: In aktiver Entwicklung.** Diese Datei reflektiert ausschließlich den realen Stand.
 
-## Geplante Produktionen
+## 1MiB — „ONE MEGABYTE" (Folgeauftrag, aktuelles Werk)
+
+Laufende Produktion mit **exakt 1.048.576 Bytes**, 120-s-AV-Timeline, Linux.
+
+| Phase | Stand |
+|---|---|
+| Baseline-Gate | BASELINE_PARTIAL dokumentiert (docs/1m/BASELINE_INVENTORY.md) |
+| Concept Triad | 3 lauffähige Prototypen → Richtung **FRACTURED ORDER** (docs/1m/CONCEPT_DECISION.md) |
+| Musik | Leitmotiv E→Bb(Tritonus)→G→B, Groove-Zustände; hörbare WAV-Evidenz (docs/1m/MUSIC_MASTERPLAN.md) |
+| Produktion | **errorwtf-1m: exakt 1.048.576 B, 120-s-Lauf exit=clean, Audio 5.760.000/5.760.000 Samples** (docs/1m/PRODUCTION_V1.md) |
+
+Artefakt-Build: `make 1m` (benötigt GLFW/GL/EGL/ALSA). Live-Modus: `./errorwtf-1m` (ESC beendet),
+Headless-Evidenz: `ERRORWTF_HEADLESS=1 ./errorwtf-1m`.
+
+## Ursprungs-Produktionen (Master-Auftrag, parallel)
 
 | # | Titel | Größe | Status |
 |---|---|---|---|
@@ -25,11 +39,20 @@ Kunst, Musik, Branding und Code dieses Projekts sind eigenständig — siehe
 
 ## Dokumentation
 
+- `docs/1m/` — komplette 1MiB-Entwicklungsdoku (Baseline, Triade, Musik, Produktion)
 - `docs/ENVIRONMENT_AUDIT.md` — gemessene Hardware/Stack-Realität
 - `docs/PROVIDER_COST_AUDIT.md` — 0,00 €-Kostenprüfung
-- `docs/AUFTRAG_KERNREGELN.md` — verbindliche Kernregeln (Edition 3.0)
+- `docs/AUFTRAG_KERNREGELN.md` — verbindliche Kernregeln
 - `SPEC.md` — Projektspezifikation
+
+## Repository-Hinweis
+
+Dieses Repo wird unter dem Zwischen-Account **ERROR-WATCH** geführt (fehlende Schreibrechte
+auf den Ziel-Account zum Zeitpunkt der Anlage) und ist als Transfer nach
+`github.com/error-wtf/error-wtf-demoscene` vorgesehen — nach dem GitHub-Transfer
+redirectet diese URL automatisch.
 
 ## License
 
-MIT — siehe LICENSE. Keine Releases vor bestandenen Release-Gates.
+MIT — siehe LICENSE. Releases erst nach bestandenen Release-Gates; Development-Builds
+sind als solche klar gekennzeichnet (alpha).
