@@ -1,0 +1,25 @@
+{
+  "schema": "errorwtf.1m.baseline-inventory.v1",
+  "captured_at": "2026-10-28",
+  "baseline_commit": "fc0fe0f",
+  "branch": "feature/errorwtf-1m",
+  "productions": [
+    {"name": "SEED", "target_bytes": 4096, "status": "MISSING", "evidence": "src/4k empty"},
+    {"name": "FRACTURE", "target_bytes": 16384, "status": "MISSING", "evidence": "src/16k empty"},
+    {"name": "EMERGENCE", "target_bytes": 65536, "status": "MISSING", "evidence": "src/64k empty"},
+    {"name": "BEYOND THE ERROR", "target_bytes": null, "status": "MISSING", "evidence": "src/ultimate empty"}
+  ],
+  "baseline_partial": {
+    "candidate": "Gate-2 AV runtime (no artwork)",
+    "status": "VERIFIED",
+    "evidence": {
+      "commit": "fc0fe0f",
+      "gl_renderer": "NVIDIA GeForce RTX 4060 Ti/PCIe/SSE2",
+      "gl_version": "3.3.0 NVIDIA 595.91.07",
+      "frames": "captures/smoke_frame_0..4.ppm (distinct hashes)",
+      "audio": "ALSA hw:0,0, 96000/96000 samples, exit 0"
+    }
+  },
+  "best_of_comparison": "BLOCKED — no comparable works exist; no invented ranking",
+  "decision": "1MiB production starts as new conception on the verified AV runtime architecture (BASELINE_PARTIAL per brief §1.2)"
+}
