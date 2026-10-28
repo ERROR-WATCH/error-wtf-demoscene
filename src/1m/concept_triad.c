@@ -160,16 +160,30 @@ static const char *FS_B =
     "void main(){\n"
     " vec2 uv=gl_FragCoord.xy/vec2(1280,720);\n"
     " float t=u_time;\n"
-    " float fr=smoothstep(8.0,9.0,t)*(1.0-smoothstep(11.0,12.5,t));\n"
-    " vec2 p=uv*14.0+fr*1.6*vec2(sin(uv.y*20.0+t*7.0),cos(uv.x*17.0-t*5.0));\n"
-    " float grid=lm(p,0.035)*(0.35+0.25*sin(t+uv.y*8.0));\n"
-    " float bars=lm(vec2(uv.x*6.0+fr*3.0,uv.y*2.0),0.05)*0.5;\n"
-    " float pulse=smoothstep(0.5,0.0,abs(fract(t*2.0)-0.5))*0.15;\n"
+    /* (4) longer fracture window, slow decay: still clearly fractured at t=12 */
+    " float fr=smoothstep(7.5,8.5,t)*(1.0-smoothstep(12.0,14.0,t));\n"
+    /* (1) ALL structure layers fracture: per-layer displacement strength */
+    " float disp=fr*2.2;\n"
+    " vec2 warp=vec2(sin(uv.y*9.0+t*2.5),cos(uv.x*7.0-t*2.0))*disp*0.08;\n"
+    /* (2) hierarchy: spines (heavy, slow drift) over varied bays over minor grid */
+    " vec2 spine_uv=vec2(uv.x*2.0+t*0.05,uv.y*2.0-t*0.03)+warp;\n"
+    " float spine=lm(spine_uv,0.012)*0.9;\n"
+    " vec2 bay1=(uv+0.03*sin(t*0.3))*8.0+warp*1.5;\n"
+    " vec2 bay2=(uv-0.02*cos(t*0.2))*5.0+warp*1.2;\n"
+    " float bays=max(lm(bay1,0.05)*(0.55+0.15*sin(t*0.9+uv.x*10.0)),lm(bay2,0.06)*0.4);\n"
+    " float grid=lm(uv*28.0+warp*2.5,0.03)*(0.22+0.10*sin(t*1.2+uv.y*14.0));\n"
+    /* (3) strong ordered-state pulse: expanding ring + beat flash */
+    " float pr=fract(t*1.0);\n"
+    " float ring=smoothstep(0.02,0.0,abs(distance(uv,vec2(0.5))-pr*0.55))*(1.0-pr);\n"
+    " float pulse=ring*0.5+smoothstep(0.5,0.0,abs(fract(t*2.0)-0.5))*0.10;\n"
+    /* fracture tint: strong energy, but structure-carried (not a flat panel) */
     " vec3 col=vec3(0.010,0.015,0.02);\n"
-    " col+=vec3(0.50,0.62,0.72)*grid;\n"
-    " col+=vec3(0.85,0.90,0.95)*bars;\n"
+    " col+=vec3(0.50,0.62,0.72)*bays;\n"
+    " col+=vec3(0.90,0.94,0.98)*spine;\n"
+    " col+=vec3(0.35,0.45,0.55)*grid;\n"
     " col+=vec3(0.10,0.30,0.45)*pulse;\n"
-    " col+=vec3(0.60,0.10,0.05)*fr*0.6;\n"
+    " col+=vec3(0.38,0.04,0.02)*fr*0.45;\n"
+    " col+=vec3(0.75,0.12,0.05)*fr*(0.30+bays*0.85+grid*0.75+spine*0.15);\n"
     " o=vec4(col,1.0);}";
 
 static const char *FS_C =
