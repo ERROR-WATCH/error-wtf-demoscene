@@ -349,9 +349,46 @@ int main(void) {
     glViewport_p(0, 0, W, H);
     GLint ul_t = glGetUniformLocation_p(prog, "u_time"), ul_s = glGetUniformLocation_p(prog, "u_scene");
 
+    unsigned char *px = malloc((size_t)W * H * 3);
+    unsigned char *px_flip = malloc((size_t)W * H * 3);
+
+    const char *offline_out = getenv("ERRORWTF_OFFLINE"); /* =fps → raw rgb24 to stdout */
+    int offline_fps = 0;
+    FILE *offline_sink = NULL;
+    if (offline_out && (offline_fps = atoi(offline_out)) > 0) {
+        offline_sink = stdout; /* ffmpeg rawvideo pipe */
+        printf("EVIDENCE: offline render %d fps, %d frames\n", offline_fps, offline_fps * EW_SECONDS);
+        fflush(stdout);
+    }
+
+    if (offline_sink) {
+        /* deterministic offline render pass: no audio thread, no wall clock —
+           the score preview WAV carries the identical score_sample() audio. */
+        long total = (long)offline_fps * EW_SECONDS;
+        for (long i = 0; i < total; i++) {
+            double t = (double)i / offline_fps;
+            glUniform1f_p(ul_t, (float)t);
+            glUniform1i_p(ul_s, scene_of(t));
+            glClearColor_p(0, 0, 0, 1);
+            glClear_p(GL_COLOR_BUFFER_BIT);
+            glDrawArrays_p(GL_TRIANGLES, 0, 3);
+            glReadPixels_p(0, 0, W, H, GL_RGB, GL_UNSIGNED_BYTE, px);
+            for (int y = 0; y < H; y++)
+                memcpy(px_flip + (size_t)(H - 1 - y) * W * 3, px + (size_t)y * W * 3, (size_t)W * 3);
+            fwrite(px_flip, (size_t)W * H * 3, 1, offline_sink);
+            if (i % (offline_fps * 10) == 0) {
+                fprintf(stderr, "EVIDENCE: offline frame %ld/%ld (t=%.1f)\n", i, total, t);
+                fflush(stderr);
+            }
+        }
+        fflush(offline_sink);
+        glfwTerminate();
+        fprintf(stderr, "EVIDENCE: offline render complete (%ld frames)\n", total);
+        return 0;
+    }
+
     pthread_t at; pthread_create(&at, NULL, audio_thread, NULL);
 
-    unsigned char *px = malloc((size_t)W * H * 3);
     int cap_i = 0, last_scene = -1;
     static const double CAPT_T[] = { 6, 20, 36, 55, 70, 85, 107, 116 };
     int capture_all = getenv("ERRORWTF_CAPTURE_ALL") != NULL;
